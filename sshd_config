@@ -1,0 +1,42 @@
+Port 22
+ListenAddress 0.0.0.0
+ListenAddress ::
+
+TrustedUserCAKeys /etc/waggle/ca.pub
+HostKey /etc/waggle/upload-server-key
+HostCertificate /etc/waggle/upload-server-key-cert.pub
+
+SyslogFacility AUTH
+LogLevel VERBOSE
+
+LoginGraceTime 60
+PermitRootLogin prohibit-password
+StrictModes yes
+MaxAuthTries 3
+MaxSessions 3
+
+PubkeyAuthentication yes
+AuthorizedKeysFile	.ssh/authorized_keys
+AuthorizedPrincipalsFile none
+
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+UsePAM no
+
+AllowAgentForwarding no
+AllowTcpForwarding no
+GatewayPorts no
+X11Forwarding no
+PermitTTY no
+PrintMotd no
+PrintLastLog no
+TCPKeepAlive yes
+PermitUserEnvironment no
+#Compression delayed
+#ClientAliveInterval 0
+#ClientAliveCountMax 3
+UseDNS no
+PidFile /var/run/sshd.pid
+#MaxStartups 10:30:100
+PermitTunnel no
+AcceptEnv LANG LC_*
