@@ -3,10 +3,9 @@ ListenAddress 0.0.0.0
 ListenAddress ::
 
 TrustedUserCAKeys /etc/waggle/ca.pub
-HostKey /etc/waggle/upload-server-key
-HostCertificate /etc/waggle/upload-server-key-cert.pub
+HostKey /etc/waggle/ssh-host-key
+HostCertificate /etc/waggle/ssh-host-key-cert.pub
 
-SyslogFacility AUTH
 LogLevel VERBOSE
 
 LoginGraceTime 60
