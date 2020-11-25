@@ -20,7 +20,6 @@ AuthorizedPrincipalsFile none
 
 PasswordAuthentication no
 ChallengeResponseAuthentication no
-UsePAM no
 
 AllowAgentForwarding no
 AllowTcpForwarding no
@@ -28,7 +27,6 @@ GatewayPorts no
 X11Forwarding no
 PermitTTY no
 PrintMotd no
-PrintLastLog no
 TCPKeepAlive yes
 PermitUserEnvironment no
 #Compression delayed
