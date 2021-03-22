@@ -4,10 +4,8 @@ ssh+rsync based upload server for training data.
 
 ## Configuration
 
-This image expects CA signed ssh keys. Please ensure that the following files exist in the expected locations:
+The follow environment variables are used:
 
-```txt
-TrustedUserCAKeys /etc/waggle/ca.pub
-HostKey /etc/waggle/upload-server-key
-HostCertificate /etc/waggle/upload-server-key-cert.pub
-```
+* `SSH_CA_PUBKEY`. Location of CA pub key. Default is `/etc/waggle/ca.pub`.
+* `SSH_HOST_KEY`. Location of upload server host key. Defalut is `/etc/waggle/ssh-host-key`.
+* `SSH_HOST_CERT`. Location of upload server host cert. Default is `/etc/waggle/ssh-host-key-cert.pub`.
