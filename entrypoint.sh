@@ -1,13 +1,22 @@
 #!/bin/sh
 
+SSH_CA_PUBKEY="${SSH_CA_PUBKEY:-/etc/waggle/ca.pub}"
+SSH_HOST_KEY="${SSH_HOST_KEY:-/etc/waggle/ssh-host-key}"
+SSH_HOST_CERT="${SSH_HOST_CERT:-/etc/waggle/ssh-host-key-cert.pub}"
+
+echo "using credentials"
+echo "ssh ca pubkey: ${SSH_CA_PUBKEY}"
+echo "ssh host key: ${SSH_HOST_KEY}"
+echo "ssh host cert: ${SSH_HOST_CERT}"
+
 cat > /etc/ssh/sshd_config <<EOF
 Port 22
 ListenAddress 0.0.0.0
 ListenAddress ::
 
-TrustedUserCAKeys ${SSH_CA_PUBKEY:-/etc/waggle/ca.pub}
-HostKey ${SSH_HOST_KEY:-/etc/waggle/ssh-host-key}
-HostCertificate ${SSH_HOST_CERT:-/etc/waggle/ssh-host-key-cert.pub}
+TrustedUserCAKeys ${SSH_CA_PUBKEY}
+HostKey ${SSH_HOST_KEY}
+HostCertificate ${SSH_HOST_CERT}
 
 LogLevel VERBOSE
 
