@@ -1,15 +1,48 @@
 #!/bin/sh
+set -eu
 
-SSH_CA_PUBKEY="${SSH_CA_PUBKEY:-/etc/waggle/ca.pub}"
-SSH_HOST_KEY="${SSH_HOST_KEY:-/etc/waggle/ssh-host-key}"
-SSH_HOST_CERT="${SSH_HOST_CERT:-/etc/waggle/ssh-host-key-cert.pub}"
+configure_persistent_etc_files() {
+    dir=/etc-data
 
-echo "using credentials"
-echo "ssh ca pubkey: ${SSH_CA_PUBKEY}"
-echo "ssh host key: ${SSH_HOST_KEY}"
-echo "ssh host cert: ${SSH_HOST_CERT}"
+    mkdir -p "${dir}"
 
-cat > /etc/ssh/sshd_config <<EOF
+    for f in passwd group shadow; do
+        # if link already configure, skip
+        if readlink "/etc/${f}"; then
+            continue
+        fi
+        # otherwise, copy contents and setup link
+        cp "/etc/${f}" "/${dir}/${f}"
+        ln -f -s "/${dir}/${f}" "/etc/${f}"
+    done
+}
+
+configure_beekeeper_user() {
+    user=beekeeper
+
+    if ! grep -q "${user}" /etc/passwd; then
+        adduser -g '' -D "${user}"
+    fi
+
+    if ! grep -q "${user}::" /etc/shadow; then
+        passwd -u "${user}"
+    fi
+}
+
+main() {
+    configure_persistent_etc_files
+    configure_beekeeper_user
+    
+    SSH_CA_PUBKEY="${SSH_CA_PUBKEY:-/etc/waggle/ca.pub}"
+    SSH_HOST_KEY="${SSH_HOST_KEY:-/etc/waggle/ssh-host-key}"
+    SSH_HOST_CERT="${SSH_HOST_CERT:-/etc/waggle/ssh-host-key-cert.pub}"
+
+    echo "using credentials"
+    echo "ssh ca pubkey: ${SSH_CA_PUBKEY}"
+    echo "ssh host key: ${SSH_HOST_KEY}"
+    echo "ssh host cert: ${SSH_HOST_CERT}"
+
+    cat > /etc/ssh/sshd_config <<EOF
 Port 22
 ListenAddress 0.0.0.0
 ListenAddress ::
@@ -51,5 +84,8 @@ PermitTunnel no
 AcceptEnv LANG LC_*
 EOF
 
-mkdir -p /run/sshd
-exec /usr/sbin/sshd -D -e
+    mkdir -p /run/sshd
+    exec /usr/sbin/sshd -D -e
+}
+
+main
