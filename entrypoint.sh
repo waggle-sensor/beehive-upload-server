@@ -97,4 +97,4 @@ EOF
     exec /usr/sbin/sshd -D -e
 }
 
-main
+main "$@"
