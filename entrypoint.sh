@@ -1,6 +1,9 @@
 #!/bin/sh
 set -eu
 
+# TODO(sean) should these setup scripts should be baked into the image or
+# should they be config and run as start from an init.d/ directory?
+
 configure_persistent_etc_files() {
     dir=/etc-data
 
@@ -27,6 +30,12 @@ configure_beekeeper_user() {
     if ! grep -q "${user}::" /etc/shadow; then
         passwd -u "${user}"
     fi
+
+    cat > "/etc/sudoers.d/${user}" <<EOF
+${user} ALL=NOPASSWD: /usr/sbin/adduser
+${user} ALL=NOPASSWD: /usr/sbin/deluser
+${user} ALL=NOPASSWD: /usr/bin/passwd
+EOF
 }
 
 main() {
