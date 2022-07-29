@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+user="${1}"
+deluser "${user}"
