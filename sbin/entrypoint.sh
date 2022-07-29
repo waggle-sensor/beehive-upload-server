@@ -15,8 +15,8 @@ configure_persistent_etc_files() {
             continue
         fi
         # otherwise, copy contents and setup link
-        cp "/etc/${f}" "/${dir}/${f}"
-        ln -f -s "/${dir}/${f}" "/etc/${f}"
+        cp "/etc/${f}" "${dir}/${f}"
+        ln -f -s "${dir}/${f}" "/etc/${f}"
     done
 }
 
@@ -32,9 +32,8 @@ configure_beekeeper_user() {
     fi
 
     cat > "/etc/sudoers.d/${user}" <<EOF
-${user} ALL=NOPASSWD: /usr/sbin/adduser
-${user} ALL=NOPASSWD: /usr/sbin/deluser
-${user} ALL=NOPASSWD: /usr/bin/passwd
+${user} ALL=NOPASSWD: /usr/sbin/bk-add-user
+${user} ALL=NOPASSWD: /usr/sbin/bk-del-user
 EOF
 }
 
